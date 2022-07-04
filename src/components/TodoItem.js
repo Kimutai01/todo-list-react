@@ -4,7 +4,7 @@ const TodoItem = (props) => (
     <input
       type="checkbox"
       checked={props.todo.checked}
-      onChange={() => props.handleChangeProps()}
+      onChange={() => props.handleChangeProps(props.todo.id)}
     />{" "}
     {props.todo.title}
   </li>

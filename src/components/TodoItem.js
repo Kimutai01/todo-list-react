@@ -1,36 +1,5 @@
-// import React from "react";
 import styles from "./TodoItem.module.css";
-// const TodoItem = (props) => {
-// const completedStyle = {
-//   fontStyle: "italic",
-//   color: "#595959",
-//   opacity: 0.4,
-//   textDecoration: "line-through",
-// };
-// handleEditing = () => {
-//   console.log("edit mode activated");
-// };
-//   return (
-// <li className={styles.item}>
-//   <div onDoubleClick={this.handleEditing}>
-//     <input
-//       type="checkbox"
-//       className={styles.checkbox}
-//       checked={props.todo.completed}
-//       onChange={() => props.handleChangeProps(props.todo.id)}
-//     />
-//     <button onClick={() => props.deletedTodoProps(props.todo.id)}>
-//       Delete
-//     </button>
-//     <span style={props.todo.completed ? completedStyle : null}>
-//       {props.todo.title}
-//     </span>
-//   </div>
-// </li>
-//   );
-// };
 
-// export default TodoItem;
 import React, { Component } from "react";
 
 export class TodoItem extends Component {
@@ -48,6 +17,9 @@ export class TodoItem extends Component {
       this.setState({ editing: false });
     }
   };
+  componentWillUnmount() {
+    console.log("Cleaning up...");
+  }
   render() {
     let viewMode = {};
     let editMode = {};

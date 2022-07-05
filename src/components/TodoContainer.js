@@ -1,39 +1,55 @@
-import React, { useState, useEffect } from "react";
-import TodosList from "./TodosList";
-import Header from "./Header";
-import InputTodo from "./InputTodo";
-import { v4 as uuidv4 } from "uuid";
-import "../App.css";
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-use-before-define */
+import React, { useState, useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import Header from './Header';
+import InputTodo from './InputTodo';
+import TodosList from './TodosList';
+
+import About from './pages/About';
+import NotMatch from './pages/NotMatch';
+import Navbar from './Navbar';
 
 const TodoContainer = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(getInitialTodos());
+
+  useEffect(() => {
+    // storing todos items
+    const temp = JSON.stringify(todos);
+    localStorage.setItem('todos', temp);
+  }, [todos]);
+
+  function getInitialTodos() {
+    // getting stored items
+    const temp = localStorage.getItem('todos');
+    const savedTodos = JSON.parse(temp);
+    return savedTodos || [];
+  }
+
   const handleChange = (id) => {
     setTodos((prevState) =>
       prevState.map((todo) => {
         if (todo.id === id) {
-          return { ...todo, completed: !todo.completed };
+          return {
+            ...todo,
+            completed: !todo.completed,
+          };
         }
         return todo;
       })
     );
   };
-  const deleteTodo = (id) => {
-    console.log("Deleted", id);
-    const { todos } = this.state;
-    const deletedTodo = todos
-      .filter((todo) => {
-        return todo.id !== id;
-      })
-      .map((todo, i) => {
-        const td = { ...todo, id: i + 1 };
-        return td;
-      });
-    setTodos([...deletedTodo]);
+
+  const delTodo = (id) => {
+    setTodos([...todos.filter((todo) => todo.id !== id)]);
   };
+
   const addTodoItem = (title) => {
     const newTodo = {
-      id: uuidv4,
-      title: title,
+      id: uuidv4(),
+      title,
       completed: false,
     };
     setTodos([...todos, newTodo]);
@@ -48,35 +64,34 @@ const TodoContainer = () => {
       })
     );
   };
-  // componentDidMount() {
-  //   fetch("https://jsonplaceholder.typicode.com/todos?_limit=10")
-  //     .then((response) => response.json())
-  //     .then((data) => this.setState({ todos: data }));
-  // }
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (prevState.todos !== this.state.todos) {
-  //     const temp = JSON.stringify(this.state.todos);
-  //     localStorage.setItem("todos", temp);
-  //   }
-  // }
-  useEffect(() => {
-    const temp = JSON.stringify(todos);
-    localStorage.setItem("todos", temp);
-  }, [todos]);
 
   return (
-    <div className="container">
-      <div className="inner">
-        <Header />
-        <InputTodo addTodoProps={addTodoItem} />
-        <TodosList
-          todos={todos}
-          handleChangeProps={handleChange}
-          deletedTodoProps={deleteTodo}
-          setUpdate={setUpdate}
-        />
-      </div>
-    </div>
+    <>
+      <Navbar />
+      <Switch>
+        <Route exact path="/">
+          <div className="container">
+            <div className="inner">
+              <Header />
+              <InputTodo addTodoProps={addTodoItem} />
+              <TodosList
+                todos={todos}
+                handleChangeProps={handleChange}
+                deleteTodoProps={delTodo}
+                setUpdate={setUpdate}
+              />
+            </div>
+          </div>
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="*">
+          <NotMatch />
+        </Route>
+      </Switch>
+    </>
   );
 };
+
 export default TodoContainer;

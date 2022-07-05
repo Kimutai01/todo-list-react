@@ -38,7 +38,8 @@ const TodoContainer = () => {
           };
         }
         return todo;
-      }));
+      })
+    );
   };
 
   const delTodo = (id) => {
@@ -53,7 +54,6 @@ const TodoContainer = () => {
     };
     setTodos([...todos, newTodo]);
   };
-
   const setUpdate = (updatedTitle, id) => {
     setTodos(
       todos.map((todo) => {
@@ -61,7 +61,7 @@ const TodoContainer = () => {
           todo.title = updatedTitle;
         }
         return todo;
-      }),
+      })
     );
   };
 
